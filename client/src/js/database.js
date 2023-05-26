@@ -26,10 +26,7 @@ export const putDb = async (content) => {
   const store = tx.objectStore("jate");
 
   // Use the .add() method to add the content into the database.
-  const request = store.add(content);
-
-  // Wait for the transaction to complete.
-  await tx.done;
+  const request = store.add({ id: 1, content: content });
 
   // Get confirmation of the request.
   const result = await request;
@@ -42,10 +39,10 @@ export const getDb = async () => {
   console.log("GET from the database");
 
   // Create a connection to the database database and version we want to use.
-  const contactDb = await openDB("jate", 1);
+  const jateDb = await openDB("jate", 1);
 
   // Create a new transaction and specify the database and data privileges.
-  const tx = contactDb.transaction("jate", "readonly");
+  const tx = jateDb.transaction("jate", "readonly");
 
   // Open up the desired object store.
   const store = tx.objectStore("jate");
