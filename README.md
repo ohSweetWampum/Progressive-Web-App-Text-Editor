@@ -1,143 +1,134 @@
-# 19 Progressive Web Applications (PWA): Text Editor
+# PWA Text Editor
 
-## Your Task
+A progressive web application that is a text editor
 
-As you have progressed through this course, you have put together a number of impressive projects that you can show off to potential employers. This project is no exception; in fact, it features some of the most impressive expressions of the concepts you have learned so far.
+## Website
 
-Your task is to build a text editor that runs in the browser. The app will be a single-page application that meets the PWA criteria. Additionally, it will feature a number of data persistence techniques that serve as redundancy in case one of the options is not supported by the browser. The application will also function offline.
+[Click here to visit the app](https://text-editor-mtg.herokuapp.com/)
 
-To build this text editor, you will start with an existing application and implement methods for getting and storing data to an IndexedDB database. You will use a package called `idb`, which is a lightweight wrapper around the IndexedDB API. It features a number of methods that are useful for storing and retrieving data, and is used by companies like Google and Mozilla.
+## Description
 
-You will deploy this full-stack application to Heroku using the [Heroku Deployment Guide on The Full-Stack Blog](https://coding-boot-camp.github.io/full-stack/heroku/heroku-deployment-guide).
+The PWA Text Editor is a Progressive Web Application that allows for offline functionality so that developers can create, store, and retrieve notes or code snippets. It utilizes Node.js, Express.js, and IndexedDB, the app also uses the idb package for data persistence. With workbox, I have enabled service workers for offline management, with webpack bundling our JavaScript files to be loaded. Once you visit the site, you can install it on your desktop, this is made possible via a manifest file and a service worker generated through webpack plugins.
 
-## User Story
+## Installation
 
-```md
-AS A developer
-I WANT to create notes or code snippets with or without an internet connection
-SO THAT I can reliably retrieve them for later use
+Navigate to the site and click "install!"
+
+## Table of Contents
+
+- [Website](#website)
+- [Description](#description)
+- [Installation](#installation)
+- [Technology](#technology)
+- [Usage](#usage)
+- [Image](#image)
+- [Code](#code)
+- [Learning](#learning)
+- [Author](#author)
+- [Credits](#credits)
+- [Contributing](#Contributing)
+- [Questions](#questions)
+- [License](#license)
+
+## Technology
+
+- Express.js
+  [Learn about Express.js](https://expressjs.com/)
+
+- Node.js
+  [Learn about Node.js](https://nodejs.org/en)
+
+- IndexedDB
+  [Learn about IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)
+
+- JavaScript
+  [Learn about JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+
+- idb
+  [Learn about idb](https://www.npmjs.com/package/idb)
+
+- Workbox
+  [Learn about Workbox](https://dev.to/noconsulate/react-pwa-with-workbox-6dl)
+
+- Git
+  [Learn about Git](https://git-scm.com/)
+
+## Usage
+
+The PWA Text Editor is a user-friendly app that lets you easily create and edit text or code snippets. Simply open the app, type your content, and it will be automatically saved. Even when you're offline, you can access and work on your saved data. Enjoy the convenience of a reliable text editor with offline capabilities, making it easy to stay productive wherever you are.
+
+# Image
+
+![Alt Text](/client/src/images/Screenshot%202023-05-25%20at%2011.43.56%20PM.png)
+
+## Code
+
+I wanted to highlight this code snippet because the putDb function in the PWA Text Editor is essential for storing user-entered content in the IndexedDB database. It establishes a connection to the database, creates a transaction, and adds the content to the object store. This ensures that the data is persisted and can be retrieved later, even when offline. The function plays a crucial role in allowing users to save and access their text or code snippets reliably.
+
+```JavaScript
+ // Export a function we will use to PUT into the database.
+export const putDb = async (content) => {
+  console.log("PUT into the database");
+
+  // Create a connection to the database and version we want to use.
+  const jateDb = await openDB("jate", 1);
+
+  // Create a new transaction and specify the database and data privileges.
+  const tx = jateDb.transaction("jate", "readwrite");
+
+  // Open up the desired object store.
+  const store = tx.objectStore("jate");
+
+  // Use the .add() method to add the content into the database.
+  const request = store.add(content);
+
+  // Wait for the transaction to complete.
+  await tx.done;
+
+  // Get confirmation of the request.
+  const result = await request;
+  console.log("Successfully added content", result);
+  return result;
+};
+
 ```
 
-## Acceptance Criteria
+## Learning
 
-```md
-GIVEN a text editor web application
-WHEN I open my application in my editor
-THEN I should see a client server folder structure
-WHEN I run `npm run start` from the root directory
-THEN I find that my application should start up the backend and serve the client
-WHEN I run the text editor application from my terminal
-THEN I find that my JavaScript files have been bundled using webpack
-WHEN I run my webpack plugins
-THEN I find that I have a generated HTML file, service worker, and a manifest file
-WHEN I use next-gen JavaScript in my application
-THEN I find that the text editor still functions in the browser without errors
-WHEN I open the text editor
-THEN I find that IndexedDB has immediately created a database storage
-WHEN I enter content and subsequently click off of the DOM window
-THEN I find that the content in the text editor has been saved with IndexedDB
-WHEN I reopen the text editor after closing it
-THEN I find that the content in the text editor has been retrieved from our IndexedDB
-WHEN I click on the Install button
-THEN I download my web application as an icon on my desktop
-WHEN I load my web application
-THEN I should have a registered service worker using workbox
-WHEN I register a service worker
-THEN I should have my static assets pre cached upon loading along with subsequent pages and static assets
-WHEN I deploy to Heroku
-THEN I should have proper build scripts for a webpack application
-```
+- IndexedDB
+- idb
+- Manifest.json
+- Webpack
+- Workbox
 
-## Mock-Up
+## Author
 
-The following animation demonstrates the application functionality:
+Matthew Gibson
 
-![Demonstration of the finished Module 19 Challenge being used in the browser and then installed.](./Assets/00-demo.gif)
+- [Portfolio](https://github.com/ohSweetWampum)
+- [LinkedIn](https://www.linkedin.com/in/matthew-gibson-6b9b12237/)
+- [Github](https://github.com/ohSweetWampum)
 
-The following image shows the application's `manifest.json` file:
+## Credits
 
-![Demonstration of the finished Module 19 Challenge with a manifest file in the browser.](./Assets/01-manifest.png)
+- Thanks to all the instructors and the in-class examples/activities they provided were especially helpful for this application.
 
-The following image shows the application's registered service worker:
+## Contributing
 
-![Demonstration of the finished Module 19 Challenge with a registered service worker in the browser.](./Assets/02-service-worker.png)
+If you would like to contribute, please contact me at [mtgibson888@gmail.com](mailto:mtgibson888@gmail.com)
 
-The following image shows the application's IndexedDB storage:
+## Questions
 
-![Demonstration of the finished Module 19 Challenge with a IndexedDB storage named 'jate' in the browser.](./Assets/03-idb-storage.png)
+If you have any questions about this application, please contact me at [mtgibson888@gmail.com](mailto:mtgibson888@gmail.com) or check out my [GitHub Profile](https://github.com/ohSweetWampum)
 
-## Grading Requirements
+## License
 
-> **Note**: If a Challenge assignment submission is marked as “0”, it is considered incomplete and will not count towards your graduation requirements. Examples of incomplete submissions include the following:
->
-> - A repository that has no code
->
-> - A repository that includes a unique name but nothing else
->
-> - A repository that includes only a README file but nothing else
->
-> - A repository that only includes starter code
+This application is covered by the MIT license
 
-This Challenge is graded based on the following criteria:
-
-### Technical Acceptance Criteria: 40%
-
-- Satisfies all of the above acceptance criteria plus the following:
-
-  - Uses IndexedDB to create an object store and includes both GET and PUT methods
-
-  - The application works without an internet connection
-
-  - Automatically saves content inside the text editor when the DOM window is unfocused
-
-  - Bundled with webpack
-
-  - Create a service worker with workbox that Caches static assets
-
-  - The application should use babel in order to use async / await
-
-  - Application must have a generated `manifest.json` using the `WebpackPwaManifest` plug-in
-
-  - Can be installed as a Progressive Web Application
-
-### Deployment: 32%
-
-- Application deployed to Heroku at live URL with build scripts
-
-- Application loads with no errors
-
-- Application GitHub URL submitted
-
-- GitHub repo contains application code
-
-### Application Quality: 15%
-
-- Application user experience is intuitive and easy to navigate
-
-- Application user interface style is clean and polished
-
-- Application resembles the mock-up functionality provided in the Challenge instructions
-
-### Repository Quality: 13%
-
-- Repository has a unique name
-
-- Repository follows best practices for file structure and naming conventions
-
-- Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
-
-- Repository contains multiple descriptive commit messages
-
-- Repository contains quality README file with description, screenshot, and link to deployed application
-
-## Review
-
-You are required to submit the following for review:
-
-- The URL of the deployed application
-
-- The URL of the GitHub repository, with a unique name and a README describing the project
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
-© 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
+```
+
+```
