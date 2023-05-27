@@ -7,13 +7,13 @@ const initdb = async () =>
     upgrade(db) {
       // If jate database already exists, log the info and exit
       if (db.objectStoreNames.contains("jate")) {
-        console.log("jate database already exists");
+        console.log("this database already exists");
         return;
       }
 
       // Create a new object store for jate with autoIncrement key
       db.createObjectStore("jate", { keyPath: "id", autoIncrement: true });
-      console.log("jate database created"); // Log the creation of new database
+      console.log("jate database has been created"); // Log the creation of new database
     },
   });
 
