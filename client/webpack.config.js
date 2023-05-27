@@ -1,35 +1,34 @@
+// Importing required modules
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 const path = require("path");
 const { InjectManifest } = require("workbox-webpack-plugin");
 
-// TODO: Add and configure workbox plugins for a service worker and manifest file.
-// TODO: Add CSS loaders and babel to webpack.
-
 module.exports = () => {
   return {
     mode: "development",
+    // Define entry points for Webpack
     entry: {
       main: "./src/js/index.js",
       install: "./src/js/install.js",
     },
+    // Configure output directory and filenames
     output: {
       filename: "[name].bundle.js",
       path: path.resolve(__dirname, "dist"),
     },
     plugins: [
-      // Webpack plugin that generates our html file and injects our bundles.
+      // HTML Webpack Plugin to generate HTML files
       new HtmlWebpackPlugin({
         template: "./index.html",
-        title: "Text Editor",
+        title: "jate",
       }),
-
-      // Injects our custom service worker
+      // Inject Manifest to generate a service worker file
       new InjectManifest({
         swSrc: "./src-sw.js",
         swDest: "src-sw.js",
       }),
-      // Creates a manifest.json file.
+      // PWA Manifest to generate a manifest file for PWA
       new WebpackPwaManifest({
         fingerprints: false,
         inject: true,
@@ -49,7 +48,7 @@ module.exports = () => {
         ],
       }),
     ],
-
+    // Configure module loading rules
     module: {
       rules: [
         {

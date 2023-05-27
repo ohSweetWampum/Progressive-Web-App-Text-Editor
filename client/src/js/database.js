@@ -1,50 +1,62 @@
+// Importing IndexedDB utility function
 import { openDB } from "idb";
 
-const initdb = async () => {
-  return openDB("jate", 1, {
+// Function for initializing the database
+const initdb = async () =>
+  openDB("jate", 1, {
     upgrade(db) {
-      if (!db.objectStoreNames.contains("jate")) {
-        // Specify keyPath to use in-line keys
-        db.createObjectStore("jate", { keyPath: "id" });
+      // If jate database already exists, log the info and exit
+      if (db.objectStoreNames.contains("jate")) {
+        console.log("jate database already exists");
+        return;
       }
+
+      // Create a new object store for jate with autoIncrement key
+      db.createObjectStore("jate", { keyPath: "id", autoIncrement: true });
+      console.log("jate database created"); // Log the creation of new database
     },
   });
-};
 
-let nextId = 0;
-
+// Function for adding content to the database
 export const putDb = async (content) => {
-  console.log("PUT into the database");
+  console.log("PUT item to the indexedDB");
 
-  const jateDb = await initdb();
+  const jateDb = await openDB("jate", 1); // Opening the database
+
+  // Creating a transaction object for writing into the database
   const tx = jateDb.transaction("jate", "readwrite");
-  const store = tx.objectStore("jate");
 
-  // Each piece of content gets its own key.
-  const request = store.add({ content: content }, nextId++);
+  // Accessing the jate object store
+  const ObjStore = tx.objectStore("jate");
 
-  const result = await request;
-  console.log("Successfully added content", result);
-  return result;
+  // Adding or updating content in the object store
+  const Request = ObjStore.put({ id: 1, content: content });
+
+  // Logging the completed request
+  const result = await Request;
+  console.log("data has been saved to the database", result);
 };
 
+// Function for fetching content from the database
 export const getDb = async () => {
-  console.log("GET from the database");
+  console.log("GET from the indexedDB");
 
-  const db = await initdb();
-  const tx = db.transaction("jate", "readonly");
-  const store = tx.objectStore("jate");
+  const jateDb = await openDB("jate", 1); // Opening the database
 
-  const contents = [];
-  let cursor = await store.openCursor();
+  // Creating a transaction object for reading from the database
+  const tx = jateDb.transaction("jate", "readonly");
 
-  while (cursor) {
-    contents.push(cursor.value.content);
-    cursor = await cursor.continue();
-  }
+  // Accessing the jate object store
+  const ObjStore = tx.objectStore("jate");
 
-  return contents;
+  // Fetching all data from the object store
+  const Request = ObjStore.getAll();
+
+  // Logging the fetched data
+  const result = await Request;
+  console.log("result.value", result);
+
+  return result?.value; // Returning the fetched data
 };
 
-// Initialize the database when the module is loaded.
-initdb();
+initdb(); // Initializing the database
