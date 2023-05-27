@@ -4,20 +4,28 @@ const initdb = async () => {
   return openDB("jate", 1, {
     upgrade(db) {
       if (!db.objectStoreNames.contains("jate")) {
-        db.createObjectStore("jate");
+        // Specify keyPath to use in-line keys
+        db.createObjectStore("jate", { keyPath: "id" });
       }
     },
   });
 };
 
+let nextId = 0;
+
 export const putDb = async (content) => {
   console.log("PUT into the database");
 
-  const db = await initdb();
-  const tx = db.transaction("jate", "readwrite");
-  await tx.objectStore("jate").put(content, "contentKey");
+  const jateDb = await initdb();
+  const tx = jateDb.transaction("jate", "readwrite");
+  const store = tx.objectStore("jate");
 
-  console.log("Successfully added content");
+  // Each piece of content gets its own key.
+  const request = store.add({ content: content }, nextId++);
+
+  const result = await request;
+  console.log("Successfully added content", result);
+  return result;
 };
 
 export const getDb = async () => {
@@ -25,7 +33,17 @@ export const getDb = async () => {
 
   const db = await initdb();
   const tx = db.transaction("jate", "readonly");
-  return tx.objectStore("jate").get("contentKey");
+  const store = tx.objectStore("jate");
+
+  const contents = [];
+  let cursor = await store.openCursor();
+
+  while (cursor) {
+    contents.push(cursor.value.content);
+    cursor = await cursor.continue();
+  }
+
+  return contents;
 };
 
 // Initialize the database when the module is loaded.
